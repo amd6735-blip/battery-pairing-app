@@ -10,7 +10,7 @@ from openpyxl.utils import get_column_letter
 
 st.set_page_config(page_title="電池配組與稽核系統", layout="wide")
 
-st.title("🔋 電池配組與工業級精準稽核系統")
+st.title("🔋 Dynapack Non-matchable Cell regrouping System")
 st.markdown("本版本已全面整合**電芯去向堆疊圖**、**全域電壓分佈散佈圖**，並支援 **Excel 生產報告一鍵導出功能**。")
 
 # --- 側邊欄參數設定 ---
