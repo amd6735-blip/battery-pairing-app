@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鋰電池電芯配組系統</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-8 text-gray-800">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-blue-600 text-center">鋰電池電芯配組系統 (Cell Re-grouping)</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-gray-100 rounded-lg">
+            <div>
+                <label class="block text-sm font-medium mb-1">1. 選擇電芯 CSV 檔案</label>
+                <input type="file" id="csvFile" accept=".csv" class="w-full text-sm">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1">2. 目標配組數量 (Clusters)</label>
+                <input type="number" id="clusterCount" value="3" min="2" max="10" class="w-full border rounded px-2 py-1 bg-white">
+            </div>
+            <div class="flex items-end">
+                <button onclick="uploadAndProcess()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-1.5 px-4 rounded transition">
+                    執行智能配組
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6">
+            <div class="border p-4 rounded-lg bg-white h-96">
+                <canvas id="scatterChart"></canvas>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-left border" id="resultTable" style="display:none;">
+                    <thead class="bg-gray-200">
+                        <tr>
+                            <th class="p-2 border">電芯 ID</th>
+                            <th class="p-2 border">容量 (mAh)</th>
+                            <th class="p-2 border">內阻 (mΩ)</th>
+                            <th class="p-2 border">電壓 (V)</th>
+                            <th class="p-2 border text-blue-600 font-bold">分配組別 (Group ID)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myChart = null;
+
+        async function uploadAndProcess() {
+            const fileInput = document.getElementById('csvFile');
+            const clusterInput = document.getElementById('clusterCount');
+            
+            if (!fileInput.files[0]) {
+                alert("請先選擇 CSV 檔案！");
+                return;
+            }
+
+            // 封裝成 FormData 傳送給後端 API
+            const formData = new FormData();
+            formData.append("file", fileInput.files
